@@ -31,15 +31,15 @@ export default async function Home() {
             />
             <Divider sx={{ p: 2 }} />
             <CardActions>
-              <Typography sx={{ flex: 1 }}>
+              <Typography variant="h6" sx={{ flex: 1 }}>
                 Rating: {book.rating}
                 <Stack direction={"row"}>
                   {[...Array(Math.floor(book.rating)).keys()].map((key) => {
-                    return <StarIcon color="warning" />;
+                    return <StarIcon key={key} color="warning" />;
                   })}
 
                   {[...Array(Math.floor(6 - book.rating)).keys()].map((key) => {
-                    return <StarBorderIcon color="warning" />;
+                    return <StarBorderIcon key={key} color="warning" />;
                   })}
                 </Stack>
               </Typography>

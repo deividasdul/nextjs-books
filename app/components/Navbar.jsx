@@ -61,6 +61,12 @@ const Navbar = () => {
               name="title"
               size="small"
               slotProps={{
+                htmlInput: {
+                  style: {
+                    color: "white",
+                  },
+                },
+
                 input: {
                   endAdornment: (
                     <InputAdornment>
