@@ -1,95 +1,55 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import {
+  Card,
+  CardActions,
+  CardHeader,
+  CardMedia,
+  CardContent,
+  Button,
+  Typography,
+  Stack,
+  Divider,
+} from "@mui/material";
+import Link from "next/link";
+import StarIcon from "@mui/icons-material/Star";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
 
-export default function Home() {
+export default async function Home() {
+  const response = await fetch("http://localhost:3000/api/books");
+  const books = await response.json();
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+    <Stack gap={4} width={"50%"}>
+      {books.map((book) => {
+        return (
+          <Card key={book.id} sx={{ p: 4, m: 4 }} elevation={12}>
+            <CardHeader title={book.title} subheader={book.author} />
+            <Divider />
+            <CardContent>{book.description}</CardContent>
+            <CardMedia
+              sx={{ height: 512, width: 512 }}
+              image={`https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg`}
             />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+            <Divider sx={{ p: 2 }} />
+            <CardActions>
+              <Typography sx={{ flex: 1 }}>
+                Rating: {book.rating}
+                <Stack direction={"row"}>
+                  {[...Array(Math.floor(book.rating)).keys()].map((key) => {
+                    return <StarIcon color="warning" />;
+                  })}
+
+                  {[...Array(Math.floor(6 - book.rating)).keys()].map((key) => {
+                    return <StarBorderIcon color="warning" />;
+                  })}
+                </Stack>
+              </Typography>
+              <Button variant="contained" color="warning" sx={{ p: 2 }}>
+                <Link href={`/book/${book.id}`}>Learn more</Link>
+              </Button>
+            </CardActions>
+          </Card>
+        );
+      })}
+    </Stack>
   );
 }
